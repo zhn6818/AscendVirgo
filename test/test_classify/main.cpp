@@ -6,7 +6,6 @@
 
 // int main(int argc, char **argv)
 // {
-//     std::cout << "hello world" << std::endl;
 //     SampleProcess sampleProcess;
 //     Result ret = sampleProcess.InitResource();
 //     if (ret != SUCCESS)

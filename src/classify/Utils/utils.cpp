@@ -35,7 +35,7 @@ Result Utils::ReadBinFile(const std::string &fileName, void *&inputBuff, uint32_
 
     binFile.seekg(0, binFile.end);
     uint32_t binFileBufferLen = binFile.tellg();
-    std::cout << "binFileBufferLen " << binFileBufferLen << std::endl;
+
     if (binFileBufferLen == 0)
     {
         ERROR_LOG("binfile is empty, filename is %s", fileName.c_str());

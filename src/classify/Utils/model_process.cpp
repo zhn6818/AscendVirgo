@@ -311,13 +311,11 @@ void ModelProcess::OutputModelResult()
         aclDataBuffer *dataBuffer = aclmdlGetDatasetBuffer(output_, i);
         void *data = aclGetDataBufferAddr(dataBuffer);
         uint32_t len = aclGetDataBufferSizeV2(dataBuffer);
-        std::cout << "len: " << len << std::endl;
         void *outHostData = nullptr;
         aclError ret = ACL_SUCCESS;
         float *outData = nullptr;
         if (!g_isDevice)
         {
-            std::cout << "iii" << std::endl;
             aclError ret = aclrtMallocHost(&outHostData, len);
             if (ret != ACL_SUCCESS)
             {
@@ -339,17 +337,16 @@ void ModelProcess::OutputModelResult()
         }
         else
         {
-            std::cout << "jjj" << std::endl;
             outData = reinterpret_cast<float *>(data);
         }
-        std::cout << "1" << std::endl;
+
 
         // map<float, unsigned int, greater<float>> resultMap;
         for (unsigned int j = 0; j < len / sizeof(float); ++j)
         {
             INFO_LOG("index[%d] value[%lf]", j, *(outData + j));
         }
-        // std::cout << "1" << std::endl;
+
         // int cnt = 0;
         // for (auto it = resultMap.begin(); it != resultMap.end(); ++it)
         // {
@@ -361,7 +358,7 @@ void ModelProcess::OutputModelResult()
 
         //     INFO_LOG("top %d: index[%d] value[%lf]", cnt, it->second, it->first);
         // }
-        // std::cout << "1" << std::endl;
+
 
         if (!g_isDevice)
         {
@@ -372,7 +369,7 @@ void ModelProcess::OutputModelResult()
                 return;
             }
         }
-        std::cout << "1" << std::endl;
+
     }
 
     INFO_LOG("output data success");

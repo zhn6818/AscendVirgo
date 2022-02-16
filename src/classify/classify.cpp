@@ -11,7 +11,7 @@ namespace ASCEND_VIRGO
     public:
         ClassifyPrivate()
         {
-            // std::cout << "ClassifyPrivate" << std::endl;
+
             deviceId_ = 0;
             testFile = {
                 "/data1/cxj/darknet2caffe/samples/cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification/data/test.bin"};
@@ -118,7 +118,7 @@ namespace ASCEND_VIRGO
             modelProcess.DestroyOutput();
 
             aclrtFree(picDevBuffer);
-            // std::cout << "~ClassifyPrivate" << std::endl;
+
         }
         void doClassify()
         {
@@ -136,18 +136,15 @@ namespace ASCEND_VIRGO
                     // return FAILED;
                 }
                 ret = modelProcess.Execute();
-                std::cout << "Execute sucess" << std::endl;
+
                 if (ret != SUCCESS)
                 {
                     ERROR_LOG("execute inference failed");
                     aclrtFree(picDevBuffer);
                     // return FAILED;
                 }
-                // std::cout << "1" << std::endl;
                 modelProcess.OutputModelResult();
-                // std::cout << "1" << std::endl;
             }
-            std::cout << "done" << std::endl;
         }
 
     private:
@@ -161,16 +158,14 @@ namespace ASCEND_VIRGO
     };
     Classify::Classify()
     {
-        // std::cout << "Classify" << std::endl;
         m_pHandlerClassifyPrivate = std::make_shared<ClassifyPrivate>();
     }
     Classify::~Classify()
     {
-        // std::cout << "~Classify" << std::endl;
+
     }
     void Classify::doClassify()
     {
-        // std::cout << "doClassify" << std::endl;
         m_pHandlerClassifyPrivate->doClassify();
     }
 };
