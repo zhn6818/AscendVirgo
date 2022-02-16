@@ -11,6 +11,9 @@
 #include <string>
 #include <iostream>
 #include "acl/acl.h"
+// #include "ascend_virgo.h"
+
+// using namespace ASCEND_VIRGO;
 
 #define INFO_LOG(fmt, ...) fprintf(stdout, "[INFO]  " fmt "\n", ##__VA_ARGS__)
 #define WARN_LOG(fmt, ...) fprintf(stdout, "[WARN]  " fmt "\n", ##__VA_ARGS__)
@@ -22,8 +25,7 @@ typedef enum Result
     FAILED = 1
 } Result;
 
-bool g_isDevice = true;
-
+static bool g_isDevice = true;
 class Utils
 {
 public:
