@@ -7,10 +7,8 @@
 #include <queue>
 #include <algorithm>
 
-
 namespace ASCEND_VIRGO
 {
-    // bool g_isDevice = true;
     class ClassifyPrivate;
     class Classify
     {

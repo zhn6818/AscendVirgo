@@ -305,8 +305,6 @@ void ModelProcess::DumpModelOutputResult()
 
 void ModelProcess::OutputModelResult()
 {
-    // std::cout << "g_isDevice: " << g_isDevice << std::endl;
-    // std::cout << "aclmdlGetDatasetNumBuffers(output_): " << aclmdlGetDatasetNumBuffers(output_) << std::endl;
     for (size_t i = 0; i < aclmdlGetDatasetNumBuffers(output_); ++i)
     {
         // get model output data
@@ -317,10 +315,10 @@ void ModelProcess::OutputModelResult()
         void *outHostData = nullptr;
         aclError ret = ACL_SUCCESS;
         float *outData = nullptr;
-        // std::cout << "1" << std::endl;
         if (!g_isDevice)
         {
             std::cout << "iii" << std::endl;
+            aclError ret = aclrtMallocHost(&outHostData, len);
             if (ret != ACL_SUCCESS)
             {
                 ERROR_LOG("aclrtMallocHost failed, malloc len[%u], errorCode[%d]",
@@ -364,6 +362,7 @@ void ModelProcess::OutputModelResult()
         //     INFO_LOG("top %d: index[%d] value[%lf]", cnt, it->second, it->first);
         // }
         // std::cout << "1" << std::endl;
+
         if (!g_isDevice)
         {
             ret = aclrtFreeHost(outHostData);

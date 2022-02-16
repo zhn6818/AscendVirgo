@@ -25,7 +25,7 @@ typedef enum Result
     FAILED = 1
 } Result;
 
-static bool g_isDevice = true;
+static bool g_isDevice = false;
 class Utils
 {
 public:
