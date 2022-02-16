@@ -13,6 +13,9 @@ namespace ASCEND_VIRGO
         {
             // std::cout << "ClassifyPrivate" << std::endl;
             deviceId_ = 0;
+            testFile = {
+                "/data1/cxj/darknet2caffe/samples/cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification/data/test.bin"};
+
             Result ret = InitResource();
         }
         Result InitResource()
@@ -63,7 +66,6 @@ namespace ASCEND_VIRGO
             g_isDevice = (runMode == ACL_DEVICE);
             INFO_LOG("get run mode success");
 
-            ModelProcess modelProcess;
             const char *omModelPath = "/data1/cxj/darknet2caffe/samples/cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification/model/resnet18.om";
             ret = modelProcess.LoadModel(omModelPath);
             if (ret != SUCCESS)
@@ -71,23 +73,91 @@ namespace ASCEND_VIRGO
                 ERROR_LOG("execute LoadModel failed");
                 return FAILED;
             }
+            ret = modelProcess.CreateModelDesc();
+            if (ret != SUCCESS)
+            {
+                ERROR_LOG("execute CreateModelDesc failed");
+                return FAILED;
+            }
+            ret = modelProcess.GetInputSizeByIndex(0, devBufferSize);
+            if (ret != SUCCESS)
+            {
+                ERROR_LOG("execute GetInputSizeByIndex failed");
+                return FAILED;
+            }
 
+            aclError aclRet = aclrtMalloc(&picDevBuffer, devBufferSize, ACL_MEM_MALLOC_NORMAL_ONLY);
+            if (aclRet != ACL_SUCCESS)
+            {
+                ERROR_LOG("malloc device buffer failed. size is %zu, errorCode is %d",
+                          devBufferSize, static_cast<int32_t>(aclRet));
+                return FAILED;
+            }
+
+            ret = modelProcess.CreateInput(picDevBuffer, devBufferSize);
+            if (ret != SUCCESS)
+            {
+                ERROR_LOG("execute CreateInput failed");
+                aclrtFree(picDevBuffer);
+                return FAILED;
+            }
+            ret = modelProcess.CreateOutput();
+            if (ret != SUCCESS)
+            {
+                aclrtFree(picDevBuffer);
+                ERROR_LOG("execute CreateOutput failed");
+                return FAILED;
+            }
+            INFO_LOG("initial memory success");
             return SUCCESS;
         }
 
         ~ClassifyPrivate()
         {
+            modelProcess.DestroyInput();
+            modelProcess.DestroyOutput();
+
+            aclrtFree(picDevBuffer);
             // std::cout << "~ClassifyPrivate" << std::endl;
         }
         void doClassify()
         {
-            // std::cout << "do ClassifyPrivate" << std::endl;
+            aclError ret;
+
+            for (size_t index = 0; index < testFile.size(); ++index)
+            {
+                INFO_LOG("start to process file:%s", testFile[index].c_str());
+                // copy image data to device buffer
+                ret = Utils::MemcpyFileToDeviceBuffer(testFile[index], picDevBuffer, devBufferSize);
+                if (ret != SUCCESS)
+                {
+                    aclrtFree(picDevBuffer);
+                    ERROR_LOG("memcpy device buffer failed, index is %zu", index);
+                    // return FAILED;
+                }
+                ret = modelProcess.Execute();
+                std::cout << "Execute sucess" << std::endl;
+                if (ret != SUCCESS)
+                {
+                    ERROR_LOG("execute inference failed");
+                    aclrtFree(picDevBuffer);
+                    // return FAILED;
+                }
+                // std::cout << "1" << std::endl;
+                modelProcess.OutputModelResult();
+                // std::cout << "1" << std::endl;
+            }
+            std::cout << "done" << std::endl;
         }
 
     private:
         int32_t deviceId_;
         aclrtContext context_;
         aclrtStream stream_;
+        std::vector<std::string> testFile;
+        size_t devBufferSize;
+        void *picDevBuffer = nullptr;
+        ModelProcess modelProcess;
     };
     Classify::Classify()
     {

@@ -6,7 +6,7 @@ project(AscendVirgo)
 # Compile options
 add_compile_options(-std=c++11)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 11)
 
 # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "./")
 set(CMAKE_CXX_FLAGS_DEBUG "-fPIC -O0 -g -Wall")
