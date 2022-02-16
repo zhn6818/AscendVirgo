@@ -18,7 +18,7 @@
 #endif
 #include "acl/acl.h"
 
-extern bool g_isDevice;
+
 
 Result Utils::ReadBinFile(const std::string &fileName, void *&inputBuff, uint32_t &fileSize)
 {
@@ -127,3 +127,4 @@ Result Utils::CheckPathIsFile(const std::string &fileName)
 #endif
     return SUCCESS;
 }
+

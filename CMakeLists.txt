@@ -6,9 +6,11 @@ project(AscendVirgo)
 # Compile options
 add_compile_options(-std=c++11)
 
+set(CMAKE_CXX_STANDARD 14)
+
 # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "./")
-# set(CMAKE_CXX_FLAGS_DEBUG "-fPIC -O0 -g -Wall")
-# set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -O2 -Wall")
+set(CMAKE_CXX_FLAGS_DEBUG "-fPIC -O0 -g -Wall")
+set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -O2 -Wall")
 
 
 
@@ -17,7 +19,7 @@ include_directories(
 )
 
 link_directories(
-    /data1/3trirdparty/acllib/lib64/stub
+    /data1/3trirdparty/Ascend/ascend-toolkit/latest/fwkacllib/lib64
 )
 
 set(
