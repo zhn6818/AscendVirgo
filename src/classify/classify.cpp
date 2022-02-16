@@ -1,6 +1,7 @@
 #include "ascend_virgo.h"
 #include "acl/acl.h"
 #include "utils.h"
+#include "model_process.h"
 
 namespace ASCEND_VIRGO
 {
@@ -61,8 +62,19 @@ namespace ASCEND_VIRGO
             }
             g_isDevice = (runMode == ACL_DEVICE);
             INFO_LOG("get run mode success");
+
+            ModelProcess modelProcess;
+            const char *omModelPath = "/data1/cxj/darknet2caffe/samples/cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification/model/resnet18.om";
+            ret = modelProcess.LoadModel(omModelPath);
+            if (ret != SUCCESS)
+            {
+                ERROR_LOG("execute LoadModel failed");
+                return FAILED;
+            }
+
             return SUCCESS;
         }
+
         ~ClassifyPrivate()
         {
             // std::cout << "~ClassifyPrivate" << std::endl;
