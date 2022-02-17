@@ -8,10 +8,11 @@ add_compile_options(-std=c++11)
 add_definitions(-O0 -g)
 set(CMAKE_CXX_STANDARD 11)
 
+
 # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "./")
 set(CMAKE_CXX_FLAGS_DEBUG "-fPIC -O0 -g -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -O2 -Wall")
-
+add_definitions(-DENABLE_DVPP_INTERFACE)
 
 
 include_directories(
@@ -30,6 +31,7 @@ set(
     libruntime.so
     c_sec
     ascend_hal
+    acl_dvpp
 )
 
 

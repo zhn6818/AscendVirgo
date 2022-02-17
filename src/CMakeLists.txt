@@ -10,6 +10,7 @@ file(
     classify/*.cpp
     Utils/*.cpp
     ModelProcess/*.cpp
+    dvpp/*.cpp
 )
 file(
     GLOB_RECURSE
@@ -23,6 +24,7 @@ include_directories(
     #${HEADER_FILES}
     ${CMAKE_CURRENT_LIST_DIR}/Utils/
     ${CMAKE_CURRENT_LIST_DIR}/ModelProcess/
+    ${CMAKE_CURRENT_LIST_DIR}/dvpp/
     ${CMAKE_CURRENT_LIST_DIR}/../include/
 )
 
