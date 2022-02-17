@@ -8,19 +8,21 @@ file(
     GLOB_RECURSE
     SOURCES_FILES
     classify/*.cpp
-    classify/Utils/*.cpp
+    Utils/*.cpp
+    ModelProcess/*.cpp
 )
 file(
     GLOB_RECURSE
     HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/../include/*.h
-    # ${CMAKE_CURRENT_LIST_DIR}/classify/Utils/*.h
-    # /data1/code/Ascend_virgo/src/classify/Utils/*.h
+    # ${CMAKE_CURRENT_LIST_DIR}/Utils/*.h
+    # /data1/code/Ascend_virgo/src/Utils/*.h
 )
 message(${HEADER_FILES})
 include_directories(
     #${HEADER_FILES}
-    ${CMAKE_CURRENT_LIST_DIR}/classify/Utils/
+    ${CMAKE_CURRENT_LIST_DIR}/Utils/
+    ${CMAKE_CURRENT_LIST_DIR}/ModelProcess/
     ${CMAKE_CURRENT_LIST_DIR}/../include/
 )
 

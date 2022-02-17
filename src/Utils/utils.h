@@ -53,6 +53,8 @@ public:
      * @return result
      */
     static Result CheckPathIsFile(const std::string &fileName);
+
+    
 };
 
 #pragma once

@@ -4,6 +4,7 @@ project(test)
 add_compile_options(-std=c++11)
 add_definitions(-O0 -g)
 include_directories(
+    ${CMAKE_CURRENT_LIST_DIR}/../include
     ${CMAKE_CURRENT_LIST_DIR}/../install/include/include/
 )
 link_directories(

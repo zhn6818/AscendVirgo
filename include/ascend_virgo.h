@@ -6,6 +6,9 @@
 #include <vector>
 #include <queue>
 #include <algorithm>
+#include <fstream>
+#include <ostream>
+#include <sstream>
 
 namespace ASCEND_VIRGO
 {
@@ -15,7 +18,7 @@ namespace ASCEND_VIRGO
     class Classify
     {
     public:
-        Classify(const std::string &model_path);
+        Classify(const std::string &model_path, const std::string &name_Path, size_t deviceId);
         ~Classify();
         void doClassify();
         size_t GetBatch();

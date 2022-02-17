@@ -9,11 +9,26 @@ namespace ASCEND_VIRGO
     class ClassifyPrivate
     {
     public:
-        ClassifyPrivate(const std::string &model_path)
+        ClassifyPrivate(const std::string &model_path, const std::string &name_Path, size_t deviceId)
         {
 
-            deviceId_ = 0;
+            deviceId_ = deviceId;
             modelPath = model_path;
+            namesPath = name_Path;
+
+            std::ifstream fin(namesPath, std::ios::in);
+            char line[1024] = {0};
+            std::string name = "";
+            while (fin.getline(line, sizeof(line)))
+            {
+                std::stringstream word(line);
+                word >> name;
+                std::cout << "name: " << name << std::endl;
+                labels.push_back(name);
+            }
+            fin.clear();
+            fin.close();
+
             testFile = {
                 "/data1/cxj/darknet2caffe/samples/cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification/data/test.bin"};
 
@@ -168,11 +183,12 @@ namespace ASCEND_VIRGO
         size_t devBufferSize;
         void *picDevBuffer = nullptr;
         ModelProcess modelProcess;
-        std::string modelPath;
+        std::string modelPath, namesPath;
+        std::vector<std::string> labels;
     };
-    Classify::Classify(const std::string &model_path)
+    Classify::Classify(const std::string &model_path, const std::string &name_Path, size_t deviceId)
     {
-        m_pHandlerClassifyPrivate = std::make_shared<ClassifyPrivate>(model_path);
+        m_pHandlerClassifyPrivate = std::make_shared<ClassifyPrivate>(model_path, name_Path, deviceId);
     }
     Classify::~Classify()
     {
