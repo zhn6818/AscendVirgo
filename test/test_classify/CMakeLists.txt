@@ -4,7 +4,7 @@ project(test_classify)
 
 add_executable(test_classify1 main.cpp)
 
-# message(${3RDLIBS})
+message(${3RDLIBS})
 
 target_link_libraries(
     test_classify1

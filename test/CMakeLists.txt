@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5.1)
 
 project(test)
 add_compile_options(-std=c++11)
-
+add_definitions(-O0 -g)
 include_directories(
     ${CMAKE_CURRENT_LIST_DIR}/../install/include/include/
 )

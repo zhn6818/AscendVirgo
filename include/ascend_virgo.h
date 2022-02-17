@@ -9,6 +9,8 @@
 
 namespace ASCEND_VIRGO
 {
+    typedef std::pair<std::string, float> Predictioin;
+
     class ClassifyPrivate;
     class Classify
     {

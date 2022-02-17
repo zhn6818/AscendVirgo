@@ -118,7 +118,6 @@ namespace ASCEND_VIRGO
             modelProcess.DestroyOutput();
 
             aclrtFree(picDevBuffer);
-
         }
         void doClassify()
         {
@@ -162,7 +161,6 @@ namespace ASCEND_VIRGO
     }
     Classify::~Classify()
     {
-
     }
     void Classify::doClassify()
     {

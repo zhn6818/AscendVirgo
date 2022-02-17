@@ -5,7 +5,7 @@ project(AscendVirgo)
 
 # Compile options
 add_compile_options(-std=c++11)
-
+add_definitions(-O0 -g)
 set(CMAKE_CXX_STANDARD 11)
 
 # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "./")
@@ -20,11 +20,16 @@ include_directories(
 
 link_directories(
     /data1/3trirdparty/Ascend/ascend-toolkit/latest/fwkacllib/lib64
+    /data1/3trirdparty/Ascend/ascend-toolkit/latest/atc/lib64
+    /data1/3trirdparty/Ascend/driver/lib64/driver
 )
 
 set(
     3RDLIBS
     libascendcl.so
+    libruntime.so
+    c_sec
+    ascend_hal
 )
 
 

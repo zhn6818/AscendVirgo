@@ -31,10 +31,7 @@ using namespace ASCEND_VIRGO;
 
 int main(int argc, char **argv)
 {
-    // Classify *tt = new Classify();
-    // tt->doClassify();
-    // delete tt;
-    std::shared_ptr<Classify> dfg= std::make_shared<Classify>();
+    std::shared_ptr<Classify> dfg = std::make_shared<Classify>();
     dfg->doClassify();
     return 0;
 }

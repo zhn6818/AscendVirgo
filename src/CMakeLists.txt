@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.5.1)
 set(CMAKE_CXX_STANDARD 11)
 
 add_compile_options(-std=c++11)
-
+add_definitions(-O0 -g)
 file(
     GLOB_RECURSE
     SOURCES_FILES
