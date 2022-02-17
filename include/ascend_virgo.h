@@ -14,6 +14,7 @@ namespace ASCEND_VIRGO
 {
     typedef std::pair<std::string, float> Predictioin;
 
+    class ClassifyDvpp;
     class ClassifyPrivate;
     class Classify
     {
@@ -25,5 +26,6 @@ namespace ASCEND_VIRGO
 
     private:
         std::shared_ptr<ClassifyPrivate> m_pHandlerClassifyPrivate;
+        std::shared_ptr<ClassifyDvpp> m_pHandlerClassifyDvpp;
     };
 };
