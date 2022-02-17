@@ -15,9 +15,10 @@ namespace ASCEND_VIRGO
     class Classify
     {
     public:
-        Classify();
+        Classify(const std::string &model_path);
         ~Classify();
         void doClassify();
+        size_t GetBatch();
 
     private:
         std::shared_ptr<ClassifyPrivate> m_pHandlerClassifyPrivate;

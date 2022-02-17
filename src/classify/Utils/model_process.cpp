@@ -121,6 +121,17 @@ Result ModelProcess::GetInputSizeByIndex(const size_t index, size_t &inputSize)
     inputSize = aclmdlGetInputSizeByIndex(modelDesc_, index);
     return SUCCESS;
 }
+Result ModelProcess::GetInputSize(size_t &inputNumber)
+{
+    if (modelDesc_ == nullptr)
+    {
+        ERROR_LOG("no model description, create input failed");
+        return FAILED;
+    }
+    inputNumber = aclmdlGetNumInputs(modelDesc_);
+
+    return SUCCESS;
+}
 
 Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
 {
@@ -340,7 +351,6 @@ void ModelProcess::OutputModelResult()
             outData = reinterpret_cast<float *>(data);
         }
 
-
         // map<float, unsigned int, greater<float>> resultMap;
         for (unsigned int j = 0; j < len / sizeof(float); ++j)
         {
@@ -359,7 +369,6 @@ void ModelProcess::OutputModelResult()
         //     INFO_LOG("top %d: index[%d] value[%lf]", cnt, it->second, it->first);
         // }
 
-
         if (!g_isDevice)
         {
             ret = aclrtFreeHost(outHostData);
@@ -369,7 +378,6 @@ void ModelProcess::OutputModelResult()
                 return;
             }
         }
-
     }
 
     INFO_LOG("output data success");

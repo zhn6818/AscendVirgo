@@ -9,10 +9,11 @@ namespace ASCEND_VIRGO
     class ClassifyPrivate
     {
     public:
-        ClassifyPrivate()
+        ClassifyPrivate(const std::string &model_path)
         {
 
             deviceId_ = 0;
+            modelPath = model_path;
             testFile = {
                 "/data1/cxj/darknet2caffe/samples/cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification/data/test.bin"};
 
@@ -20,8 +21,9 @@ namespace ASCEND_VIRGO
         }
         Result InitResource()
         {
-            const char *aclConfigPath = "/data1/cxj/darknet2caffe/samples/cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification/src/acl.json";
-            aclError ret = aclInit(aclConfigPath);
+            // const char *aclConfigPath = "/data1/cxj/darknet2caffe/samples/cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification/src/acl.json";
+            // aclError ret = aclInit(aclConfigPath);
+            aclError ret = aclInit(nullptr);
             if (ret != ACL_SUCCESS)
             {
                 ERROR_LOG("acl init failed, errorCode = %d", static_cast<int32_t>(ret));
@@ -66,8 +68,8 @@ namespace ASCEND_VIRGO
             g_isDevice = (runMode == ACL_DEVICE);
             INFO_LOG("get run mode success");
 
-            const char *omModelPath = "/data1/cxj/darknet2caffe/samples/cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification/model/resnet18.om";
-            ret = modelProcess.LoadModel(omModelPath);
+            // const char *omModelPath = "/data1/cxj/darknet2caffe/samples/cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification/model/resnet18.om";
+            ret = modelProcess.LoadModel(modelPath.c_str());
             if (ret != SUCCESS)
             {
                 ERROR_LOG("execute LoadModel failed");
@@ -145,6 +147,18 @@ namespace ASCEND_VIRGO
                 modelProcess.OutputModelResult();
             }
         }
+        size_t GetBatch()
+        {
+            size_t inputNumber;
+            aclError ret = modelProcess.GetInputSize(inputNumber);
+            ;
+            if (ret != ACL_SUCCESS)
+            {
+                ERROR_LOG("acl init failed, errorCode = %d", static_cast<int32_t>(ret));
+                return FAILED;
+            }
+            return inputNumber;
+        }
 
     private:
         int32_t deviceId_;
@@ -154,13 +168,18 @@ namespace ASCEND_VIRGO
         size_t devBufferSize;
         void *picDevBuffer = nullptr;
         ModelProcess modelProcess;
+        std::string modelPath;
     };
-    Classify::Classify()
+    Classify::Classify(const std::string &model_path)
     {
-        m_pHandlerClassifyPrivate = std::make_shared<ClassifyPrivate>();
+        m_pHandlerClassifyPrivate = std::make_shared<ClassifyPrivate>(model_path);
     }
     Classify::~Classify()
     {
+    }
+    size_t Classify::GetBatch()
+    {
+        return m_pHandlerClassifyPrivate->GetBatch();
     }
     void Classify::doClassify()
     {

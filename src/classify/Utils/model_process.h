@@ -55,12 +55,13 @@ public:
     */
     Result GetInputSizeByIndex(const size_t index, size_t &inputSize);
 
+    Result GetInputSize(size_t &inputNumber);
     /**
-    * @brief create model input
-    * @param [in] inputDataBuffer: input buffer
-    * @param [in] bufferSize: input buffer size
-    * @return result
-    */
+     * @brief create model input
+     * @param [in] inputDataBuffer: input buffer
+     * @param [in] bufferSize: input buffer size
+     * @return result
+     */
     Result CreateInput(void *inputDataBuffer, size_t bufferSize);
 
     /**

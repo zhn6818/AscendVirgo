@@ -31,7 +31,9 @@ using namespace ASCEND_VIRGO;
 
 int main(int argc, char **argv)
 {
-    std::shared_ptr<Classify> dfg = std::make_shared<Classify>();
+    const std::string modelPath = "/data1/cxj/darknet2caffe/samples/cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification/model/resnet18.om";
+    std::shared_ptr<Classify> dfg = std::make_shared<Classify>(modelPath);
+    size_t batchSize = dfg->GetBatch();
     dfg->doClassify();
     return 0;
 }
