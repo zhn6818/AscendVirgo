@@ -128,8 +128,9 @@ namespace ASCEND_VIRGO
 
         aclrtFree(picDevBuffer);
     }
-    std::vector<std::vector<Predictioin>> ClassifyPrivate::doClassify(const std::vector<cv::Mat> &imgs)
+    void ClassifyPrivate::doClassify(const std::vector<cv::Mat> &imgs, std::vector<std::vector<Predictioin>> &result)
     {
+        result.clear();
         aclError ret;
 
         // for (size_t index = 0; index < testFile.size(); ++index)
@@ -155,8 +156,22 @@ namespace ASCEND_VIRGO
         }
         std::vector<std::vector<float>> tmpFloat;
         modelProcess.OutputModelResult(tmpFloat);
-        std::cout << tmpFloat[0].size() << std::endl;
-        // }
+        for (int i = 0; i < tmpFloat.size(); i++)
+        {
+            std::vector<Predictioin> tmpResult;
+            int maxValue = tmpFloat[i][0];
+            int index = 0;
+            for (int j = 0; j < tmpFloat[i].size(); j++)
+            {
+                if (tmpFloat[i][j] > maxValue)
+                {
+                    maxValue = tmpFloat[i][j];
+                    index = j;
+                }
+            }
+            tmpResult.push_back(std::make_pair(labels[index], prob_sigmoid(maxValue)));
+            result.push_back(tmpResult);
+        }
     }
     size_t ClassifyPrivate::GetBatch()
     {

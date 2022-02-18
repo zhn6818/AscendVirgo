@@ -152,8 +152,9 @@ Result Utils::MemcpyImgToDeviceBuffer(cv::Mat &img, void *&picDevBuffer, size_t 
         return FAILED;
     }
     cv::Mat resizedimage;
+    cv::Mat imagef;
     cv::resize(img, resizedimage, cv::Size(150, 150));
-    resizedimage.convertTo(resizedimage, CV_32FC3);
+    resizedimage.convertTo(imagef, CV_32FC3);
     float *imagetrans = (float *)malloc(inputBuffSize);
     int index = 0;
     int step = resizedimage.cols * resizedimage.rows;
@@ -161,9 +162,9 @@ Result Utils::MemcpyImgToDeviceBuffer(cv::Mat &img, void *&picDevBuffer, size_t 
     {
         for (int j = 0; j < resizedimage.cols; j++)
         {
-            *(imagetrans + index) = resizedimage.at<cv::Vec3f>(i, j)[0];
-            *(imagetrans + index + step) = resizedimage.at<cv::Vec3f>(i, j)[0];
-            *(imagetrans + index + 2 * step) = resizedimage.at<cv::Vec3f>(i, j)[0];
+            *(imagetrans + index) = imagef.at<cv::Vec3f>(i, j)[0];
+            *(imagetrans + index + step) = imagef.at<cv::Vec3f>(i, j)[1];
+            *(imagetrans + index + 2 * step) = imagef.at<cv::Vec3f>(i, j)[2];
             index++;
         }
     }

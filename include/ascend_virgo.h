@@ -15,7 +15,7 @@
 namespace ASCEND_VIRGO
 {
     typedef std::pair<std::string, float> Predictioin;
-
+    static float prob_sigmoid(float x) { return (1 / (1 + exp(-x))); }
     class ClassifyDvpp;
     class ClassifyPrivate;
     class Classify
@@ -23,7 +23,7 @@ namespace ASCEND_VIRGO
     public:
         Classify(const std::string &model_path, const std::string &name_Path, size_t deviceId);
         ~Classify();
-        std::vector<std::vector<Predictioin>> doClassify(const std::vector<cv::Mat> &imgs);
+        void doClassify(const std::vector<cv::Mat> &, std::vector<std::vector<Predictioin>> &);
         size_t GetBatch();
 
     private:

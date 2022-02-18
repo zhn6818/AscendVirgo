@@ -95,7 +95,7 @@ public:
     /**
      * @brief print model output result
      */
-    void OutputModelResult(std::vector<std::vector<float>> outFloat);
+    void OutputModelResult(std::vector<std::vector<float>>& outFloat);
 
 private:
     uint32_t modelId_;

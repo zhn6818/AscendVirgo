@@ -13,7 +13,7 @@ namespace ASCEND_VIRGO
         Result InitResource();
 
         ~ClassifyPrivate();
-        std::vector<std::vector<Predictioin>> doClassify(const std::vector<cv::Mat> &imgs);
+        void doClassify(const std::vector<cv::Mat> &imgs, std::vector<std::vector<Predictioin>> &);
         size_t GetBatch();
 
     private:

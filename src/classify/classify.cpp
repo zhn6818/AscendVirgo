@@ -19,9 +19,9 @@ namespace ASCEND_VIRGO
     {
         return m_pHandlerClassifyPrivate->GetBatch();
     }
-    std::vector<std::vector<Predictioin>> Classify::doClassify(const std::vector<cv::Mat> &imgs)
+    void Classify::doClassify(const std::vector<cv::Mat> &imgs, std::vector<std::vector<Predictioin>> &result)
     {
-        return m_pHandlerClassifyPrivate->doClassify(imgs);
+        m_pHandlerClassifyPrivate->doClassify(imgs, result);
     }
 
     // Classify::Classify(const std::string &model_path, const std::string &name_Path, size_t deviceId)
