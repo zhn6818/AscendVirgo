@@ -314,7 +314,7 @@ void ModelProcess::DumpModelOutputResult()
     return;
 }
 
-void ModelProcess::OutputModelResult(std::vector<std::vector<float>>& outFloat)
+void ModelProcess::OutputModelResult(std::vector<std::vector<float>> &outFloat)
 {
 
     for (size_t i = 0; i < aclmdlGetDatasetNumBuffers(output_); ++i)
@@ -354,11 +354,11 @@ void ModelProcess::OutputModelResult(std::vector<std::vector<float>>& outFloat)
         }
 
         // map<float, unsigned int, greater<float>> resultMap;
-        // for (unsigned int j = 0; j < len / sizeof(float); ++j)
-        // {
-        //     INFO_LOG("index[%d] value[%lf]", j, *(outData + j));
-        //     tmpFloat.push_back(*(outData + j));
-        // }
+        for (unsigned int j = 0; j < len / sizeof(float); ++j)
+        {
+            INFO_LOG("index[%d] value[%lf]", j, *(outData + j));
+            tmpFloat.push_back(*(outData + j));
+        }
 
         if (!g_isDevice)
         {

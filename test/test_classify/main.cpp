@@ -10,14 +10,19 @@ int main(int argc, char **argv)
     size_t deviceId = 0;
     std::shared_ptr<Classify> dfg = std::make_shared<Classify>(modelPath, namesPath, deviceId);
     size_t batchSize = dfg->GetBatch();
-    cv::Mat img = cv::Mat(150, 150, CV_8UC3, cv::Scalar::all(1));
-    std::vector<cv::Mat> imgs;
-    imgs.push_back(img);
-    std::vector<std::vector<Predictioin>> resultT;
-    dfg->doClassify(imgs, resultT);
-    for (int i = 0; i < resultT.size(); i++)
+    
+    for (int i = 0; i < 1;)
     {
-        std::cout << "result: " << resultT[i][0].first << " " << resultT[i][0].second << std::endl;
+        cv::Mat img = cv::Mat(150, 150, CV_8UC3, cv::Scalar::all(1));
+        std::vector<cv::Mat> imgs;
+        imgs.push_back(img);
+        std::vector<std::vector<Predictioin>> resultT;
+        dfg->doClassify(imgs, resultT);
+        for (int i = 0; i < resultT.size(); i++)
+        {
+            std::cout << "result: " << resultT[i][0].first << " " << resultT[i][0].second << std::endl;
+        }
     }
+
     return 0;
 }
