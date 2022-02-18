@@ -26,6 +26,10 @@ namespace ASCEND_VIRGO
 
         Result ret = InitResource();
     }
+    size_t ClassifyPrivate::GetInputSize()
+    {
+        return this->devBufferSize;
+    }
     Result ClassifyPrivate::InitResource()
     {
         // const char *aclConfigPath = "/data1/cxj/darknet2caffe/samples/cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification/src/acl.json";
@@ -128,24 +132,10 @@ namespace ASCEND_VIRGO
 
         aclrtFree(picDevBuffer);
     }
-    void ClassifyPrivate::doClassify(const std::vector<cv::Mat> &imgs, std::vector<std::vector<Predictioin>> &result)
+    void ClassifyPrivate::Classification(std::vector<std::vector<Predictioin>> &result)
     {
         result.clear();
         aclError ret;
-
-        // for (size_t index = 0; index < testFile.size(); ++index)
-        // {
-        INFO_LOG("start to process file, batch is :%d", imgs.size());
-        // copy image data to device buffer
-        // ret = Utils::MemcpyFileToDeviceBuffer(testFile[index], picDevBuffer, devBufferSize);
-        cv::Mat tmp = imgs[0].clone();
-        ret = Utils::MemcpyImgToDeviceBuffer(tmp, picDevBuffer, devBufferSize);
-        if (ret != SUCCESS)
-        {
-            aclrtFree(picDevBuffer);
-            ERROR_LOG("memcpy device buffer failed");
-            // return FAILED;
-        }
         ret = modelProcess.Execute();
 
         if (ret != SUCCESS)
@@ -172,6 +162,51 @@ namespace ASCEND_VIRGO
             tmpResult.push_back(std::make_pair(labels[index], prob_sigmoid(maxValue)));
             result.push_back(tmpResult);
         }
+    }
+    void ClassifyPrivate::Precess(const std::vector<cv::Mat> &imgs)
+    {
+
+        aclError ret;
+
+        // for (size_t index = 0; index < testFile.size(); ++index)
+        // {
+        INFO_LOG("start to process file, batch is :%d", imgs.size());
+        // copy image data to device buffer
+        // ret = Utils::MemcpyFileToDeviceBuffer(testFile[index], picDevBuffer, devBufferSize);
+        cv::Mat tmp = imgs[0].clone();
+        ret = Utils::MemcpyImgToDeviceBuffer(tmp, picDevBuffer, devBufferSize);
+        if (ret != SUCCESS)
+        {
+            aclrtFree(picDevBuffer);
+            ERROR_LOG("memcpy device buffer failed");
+            // return FAILED;
+        }
+        // ret = modelProcess.Execute();
+
+        // if (ret != SUCCESS)
+        // {
+        //     ERROR_LOG("execute inference failed");
+        //     aclrtFree(picDevBuffer);
+        //     // return FAILED;
+        // }
+        // std::vector<std::vector<float>> tmpFloat;
+        // modelProcess.OutputModelResult(tmpFloat);
+        // for (int i = 0; i < tmpFloat.size(); i++)
+        // {
+        //     std::vector<Predictioin> tmpResult;
+        //     int maxValue = tmpFloat[i][0];
+        //     int index = 0;
+        //     for (int j = 0; j < tmpFloat[i].size(); j++)
+        //     {
+        //         if (tmpFloat[i][j] > maxValue)
+        //         {
+        //             maxValue = tmpFloat[i][j];
+        //             index = j;
+        //         }
+        //     }
+        //     tmpResult.push_back(std::make_pair(labels[index], prob_sigmoid(maxValue)));
+        //     result.push_back(tmpResult);
+        // }
     }
     size_t ClassifyPrivate::GetBatch()
     {

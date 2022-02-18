@@ -129,12 +129,6 @@ Result Utils::MemcpyImgToDeviceBuffer(cv::Mat &img, void *&picDevBuffer, size_t 
 {
     void *inputBuff = nullptr;
     uint32_t fileSize = img.cols * img.rows * img.channels() * sizeof(float);
-    // auto ret = Utils::ReadBinFile(fileName, inputBuff, fileSize);
-    // if (ret != SUCCESS)
-    // {
-    //     ERROR_LOG("read bin file failed, file name is %s", fileName.c_str());
-    //     return FAILED;
-    // }
 
     auto ret = SUCCESS;
 
@@ -168,10 +162,6 @@ Result Utils::MemcpyImgToDeviceBuffer(cv::Mat &img, void *&picDevBuffer, size_t 
             index++;
         }
     }
-
-    // if (!g_isDevice)
-    // {
-    // if app is running in host, need copy data from host to device
     aclError aclRet = aclrtMemcpy(picDevBuffer, inputBuffSize, imagetrans, inputBuffSize, ACL_MEMCPY_HOST_TO_DEVICE);
     if (aclRet != ACL_SUCCESS)
     {
@@ -180,18 +170,6 @@ Result Utils::MemcpyImgToDeviceBuffer(cv::Mat &img, void *&picDevBuffer, size_t 
         return FAILED;
     }
     (void)aclrtFreeHost(inputBuff);
-    // }
-    // else
-    // { // app is running in device
-    //     aclError aclRet = aclrtMemcpy(picDevBuffer, inputBuffSize, inputBuff, inputBuffSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
-    //     if (aclRet != ACL_SUCCESS)
-    //     {
-    //         ERROR_LOG("memcpy d2d failed. buffer size is %zu, errorCode is %d", inputBuffSize, static_cast<int32_t>(aclRet));
-    //         (void)aclrtFree(inputBuff);
-    //         return FAILED;
-    //     }
-    //     (void)aclrtFree(inputBuff);
-    // }
     return SUCCESS;
 }
 

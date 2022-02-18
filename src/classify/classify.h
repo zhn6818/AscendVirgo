@@ -13,8 +13,10 @@ namespace ASCEND_VIRGO
         Result InitResource();
 
         ~ClassifyPrivate();
-        void doClassify(const std::vector<cv::Mat> &imgs, std::vector<std::vector<Predictioin>> &);
+        void Precess(const std::vector<cv::Mat> &imgs);
+        void Classification(std::vector<std::vector<Predictioin>> &);
         size_t GetBatch();
+        size_t GetInputSize();
 
     private:
         int32_t deviceId_;
