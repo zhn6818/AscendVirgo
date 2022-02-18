@@ -24,6 +24,7 @@ namespace ASCEND_VIRGO
         Classify(const std::string &model_path, const std::string &name_Path, size_t deviceId);
         ~Classify();
         void Precess(const std::vector<cv::Mat> &);
+        void Precess(void *, size_t);
         void Classification(std::vector<std::vector<Predictioin>> &);
         size_t GetBatch();
         size_t GetInputSize();

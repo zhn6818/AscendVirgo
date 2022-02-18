@@ -113,7 +113,7 @@ public:
      */
     static Result MemcpyFileToDeviceBuffer(const std::string &fileName, void *&picDevBuffer, size_t inputBuffSize);
     static Result MemcpyImgToDeviceBuffer(cv::Mat &img, void *&picDevBuffer, size_t inputBuffSize);
-
+    static Result MemcpyDeviceToDeviceBuffer(void* &pDev, void *&picDevBuffer, size_t inputBuffSize);
     /**
      * @brief Check whether the path is a file.
      * @param [in] fileName: fold to check

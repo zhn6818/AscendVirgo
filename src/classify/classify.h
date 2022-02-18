@@ -14,6 +14,7 @@ namespace ASCEND_VIRGO
 
         ~ClassifyPrivate();
         void Precess(const std::vector<cv::Mat> &imgs);
+        void Precess(void *pDevbuff, size_t);
         void Classification(std::vector<std::vector<Predictioin>> &);
         size_t GetBatch();
         size_t GetInputSize();

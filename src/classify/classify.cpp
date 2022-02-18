@@ -23,6 +23,10 @@ namespace ASCEND_VIRGO
     {
         m_pHandlerClassifyPrivate->Precess(imgs);
     }
+    void Classify::Precess(void *pDevbuff, size_t iLength)
+    {
+        m_pHandlerClassifyPrivate->Precess(pDevbuff, iLength);
+    }
     void Classify::Classification(std::vector<std::vector<Predictioin>> &result)
     {
         m_pHandlerClassifyPrivate->Classification(result);

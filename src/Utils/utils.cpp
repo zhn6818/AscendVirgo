@@ -124,6 +124,18 @@ Result Utils::MemcpyFileToDeviceBuffer(const std::string &fileName, void *&picDe
     }
     return SUCCESS;
 }
+Result Utils::MemcpyDeviceToDeviceBuffer(void *&pDev, void *&picDevBuffer, size_t inputBuffSize)
+{
+    aclError aclRet = aclrtMemcpy(picDevBuffer, inputBuffSize, pDev, inputBuffSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
+    if (aclRet != ACL_SUCCESS)
+    {
+        ERROR_LOG("memcpy failed. buffer size is %zu, errorCode is %d", inputBuffSize, static_cast<int32_t>(aclRet));
+        (void)aclrtFree(pDev);
+        return FAILED;
+    }
+
+    return SUCCESS;
+}
 
 Result Utils::MemcpyImgToDeviceBuffer(cv::Mat &img, void *&picDevBuffer, size_t inputBuffSize)
 {

@@ -4,6 +4,46 @@
 #include "acl/acl.h"
 using namespace ASCEND_VIRGO;
 
+size_t MemcpyImgToDevice(cv::Mat &img, void *&picDevBuffer, size_t inputBuffSize)
+{
+    void *inputBuff = nullptr;
+    uint32_t fileSize = img.cols * img.rows * img.channels() * sizeof(float);
+
+    auto ret = 0;
+
+    if (inputBuffSize != static_cast<size_t>(fileSize))
+    {
+
+        std::cout << "!!!!!!!       size error     !!!!!!!!!!!!" << std::endl;
+        return 1;
+    }
+    cv::Mat resizedimage;
+    cv::Mat imagef;
+    cv::resize(img, resizedimage, cv::Size(150, 150));
+    resizedimage.convertTo(imagef, CV_32FC3);
+    float *imagetrans = (float *)malloc(inputBuffSize);
+    int index = 0;
+    int step = resizedimage.cols * resizedimage.rows;
+    for (int i = 0; i < resizedimage.rows; i++)
+    {
+        for (int j = 0; j < resizedimage.cols; j++)
+        {
+            *(imagetrans + index) = imagef.at<cv::Vec3f>(i, j)[0];
+            *(imagetrans + index + step) = imagef.at<cv::Vec3f>(i, j)[1];
+            *(imagetrans + index + 2 * step) = imagef.at<cv::Vec3f>(i, j)[2];
+            index++;
+        }
+    }
+    aclError aclRet = aclrtMemcpy(picDevBuffer, inputBuffSize, imagetrans, inputBuffSize, ACL_MEMCPY_HOST_TO_DEVICE);
+    if (aclRet != 0)
+    {
+        (void)aclrtFreeHost(inputBuff);
+        return 1;
+    }
+    (void)aclrtFreeHost(inputBuff);
+    return 0;
+}
+
 int main(int argc, char **argv)
 {
     void *picDevBuffer = nullptr;
@@ -25,7 +65,10 @@ int main(int argc, char **argv)
         std::vector<cv::Mat> imgs;
         imgs.push_back(img);
         std::vector<std::vector<Predictioin>> resultT;
-        dfg->Precess(imgs);
+
+        MemcpyImgToDevice(img, picDevBuffer, devBufferSize);
+        dfg->Precess(picDevBuffer, devBufferSize);
+        // dfg->Precess(imgs);
         dfg->Classification(resultT);
         for (int i = 0; i < resultT.size(); i++)
         {

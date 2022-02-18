@@ -163,6 +163,16 @@ namespace ASCEND_VIRGO
             result.push_back(tmpResult);
         }
     }
+    void ClassifyPrivate::Precess(void *pDevbuff, size_t iLength)
+    {
+        INFO_LOG("start dev preprocess");
+        aclError ret;
+        if (iLength != devBufferSize)
+        {
+            INFO_LOG(" dev size error.");
+        }
+        ret = Utils::MemcpyDeviceToDeviceBuffer(pDevbuff, picDevBuffer, devBufferSize);
+    }
     void ClassifyPrivate::Precess(const std::vector<cv::Mat> &imgs)
     {
 
@@ -181,32 +191,6 @@ namespace ASCEND_VIRGO
             ERROR_LOG("memcpy device buffer failed");
             // return FAILED;
         }
-        // ret = modelProcess.Execute();
-
-        // if (ret != SUCCESS)
-        // {
-        //     ERROR_LOG("execute inference failed");
-        //     aclrtFree(picDevBuffer);
-        //     // return FAILED;
-        // }
-        // std::vector<std::vector<float>> tmpFloat;
-        // modelProcess.OutputModelResult(tmpFloat);
-        // for (int i = 0; i < tmpFloat.size(); i++)
-        // {
-        //     std::vector<Predictioin> tmpResult;
-        //     int maxValue = tmpFloat[i][0];
-        //     int index = 0;
-        //     for (int j = 0; j < tmpFloat[i].size(); j++)
-        //     {
-        //         if (tmpFloat[i][j] > maxValue)
-        //         {
-        //             maxValue = tmpFloat[i][j];
-        //             index = j;
-        //         }
-        //     }
-        //     tmpResult.push_back(std::make_pair(labels[index], prob_sigmoid(maxValue)));
-        //     result.push_back(tmpResult);
-        // }
     }
     size_t ClassifyPrivate::GetBatch()
     {
