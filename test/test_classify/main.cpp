@@ -9,6 +9,9 @@ int main(int argc, char **argv)
     size_t deviceId = 0;
     std::shared_ptr<Classify> dfg = std::make_shared<Classify>(modelPath, namesPath, deviceId);
     size_t batchSize = dfg->GetBatch();
-    dfg->doClassify();
+    cv::Mat img = cv::Mat(150, 150, CV_32FC3, cv::Scalar::all(0));
+    std::vector<cv::Mat> imgs;
+    imgs.push_back(img);
+    dfg->doClassify(imgs);
     return 0;
 }

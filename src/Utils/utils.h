@@ -14,6 +14,8 @@
 #include <sstream>
 #include <iostream>
 #include "acl/acl.h"
+#include <opencv2/opencv.hpp>
+#include <opencv2/imgproc/types_c.h>
 // #include "ascend_virgo.h"
 
 // using namespace ASCEND_VIRGO;
@@ -110,6 +112,7 @@ public:
      * @return result
      */
     static Result MemcpyFileToDeviceBuffer(const std::string &fileName, void *&picDevBuffer, size_t inputBuffSize);
+    static Result MemcpyImgToDeviceBuffer(cv::Mat &img, void *&picDevBuffer, size_t inputBuffSize);
 
     /**
      * @brief Check whether the path is a file.

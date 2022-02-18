@@ -1,8 +1,7 @@
-#include "classifyDvpp.h"
-
+#include "classify.h"
 namespace ASCEND_VIRGO
 {
-    ClassifyDvpp::ClassifyDvpp(const std::string &model_path, const std::string &name_Path, size_t deviceId)
+    ClassifyPrivate::ClassifyPrivate(const std::string &model_path, const std::string &name_Path, size_t deviceId)
     {
 
         deviceId_ = deviceId;
@@ -27,7 +26,7 @@ namespace ASCEND_VIRGO
 
         Result ret = InitResource();
     }
-    Result ClassifyDvpp::InitResource()
+    Result ClassifyPrivate::InitResource()
     {
         // const char *aclConfigPath = "/data1/cxj/darknet2caffe/samples/cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification/src/acl.json";
         // aclError ret = aclInit(aclConfigPath);
@@ -122,41 +121,44 @@ namespace ASCEND_VIRGO
         return SUCCESS;
     }
 
-    ClassifyDvpp::~ClassifyDvpp()
+    ClassifyPrivate::~ClassifyPrivate()
     {
         modelProcess.DestroyInput();
         modelProcess.DestroyOutput();
 
         aclrtFree(picDevBuffer);
     }
-    void ClassifyDvpp::doClassify()
+    std::vector<std::vector<Predictioin>> ClassifyPrivate::doClassify(const std::vector<cv::Mat> &imgs)
     {
         aclError ret;
 
-        for (size_t index = 0; index < testFile.size(); ++index)
+        // for (size_t index = 0; index < testFile.size(); ++index)
+        // {
+        INFO_LOG("start to process file, batch is :%d", imgs.size());
+        // copy image data to device buffer
+        // ret = Utils::MemcpyFileToDeviceBuffer(testFile[index], picDevBuffer, devBufferSize);
+        cv::Mat tmp = imgs[0].clone();
+        ret = Utils::MemcpyImgToDeviceBuffer(tmp, picDevBuffer, devBufferSize);
+        if (ret != SUCCESS)
         {
-            INFO_LOG("start to process file:%s", testFile[index].c_str());
-            // copy image data to device buffer
-            ret = Utils::MemcpyFileToDeviceBuffer(testFile[index], picDevBuffer, devBufferSize);
-            if (ret != SUCCESS)
-            {
-                aclrtFree(picDevBuffer);
-                ERROR_LOG("memcpy device buffer failed, index is %zu", index);
-                // return FAILED;
-            }
-            ret = modelProcess.Execute();
-
-            if (ret != SUCCESS)
-            {
-                ERROR_LOG("execute inference failed");
-                aclrtFree(picDevBuffer);
-                // return FAILED;
-            }
-            std::vector<std::vector<float>> tmpFloat;
-            modelProcess.OutputModelResult(tmpFloat);
+            aclrtFree(picDevBuffer);
+            ERROR_LOG("memcpy device buffer failed");
+            // return FAILED;
         }
+        ret = modelProcess.Execute();
+
+        if (ret != SUCCESS)
+        {
+            ERROR_LOG("execute inference failed");
+            aclrtFree(picDevBuffer);
+            // return FAILED;
+        }
+        std::vector<std::vector<float>> tmpFloat;
+        modelProcess.OutputModelResult(tmpFloat);
+        std::cout << tmpFloat[0].size() << std::endl;
+        // }
     }
-    size_t ClassifyDvpp::GetBatch()
+    size_t ClassifyPrivate::GetBatch()
     {
         size_t inputNumber;
         aclError ret = modelProcess.GetInputSize(inputNumber);
@@ -168,4 +170,4 @@ namespace ASCEND_VIRGO
         }
         return inputNumber;
     }
-};
+}

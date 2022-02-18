@@ -14,15 +14,23 @@ set(CMAKE_CXX_FLAGS_DEBUG "-fPIC -O0 -g -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -O2 -Wall")
 add_definitions(-DENABLE_DVPP_INTERFACE)
 
+set(
+    OpenCV_INCLUDE_DIRS
+    /data1/3trirdparty/opencv/opencv4.5.2/include/opencv4
+
+)
 
 include_directories(
     /data1/3trirdparty/acllib/
+    ${OpenCV_INCLUDE_DIRS}
 )
 
 link_directories(
     /data1/3trirdparty/Ascend/ascend-toolkit/latest/fwkacllib/lib64
     /data1/3trirdparty/Ascend/ascend-toolkit/latest/atc/lib64
     /data1/3trirdparty/Ascend/driver/lib64/driver
+    /data1/3trirdparty/opencv/opencv4.5.2/lib
+    /data1/3trirdparty/tbb/lib
 )
 
 set(
@@ -32,6 +40,11 @@ set(
     c_sec
     ascend_hal
     acl_dvpp
+    opencv_core
+    opencv_imgproc
+    opencv_imgcodecs
+    tbb
+    libtbb.so.2
 )
 
 

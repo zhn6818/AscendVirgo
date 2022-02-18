@@ -314,11 +314,13 @@ void ModelProcess::DumpModelOutputResult()
     return;
 }
 
-void ModelProcess::OutputModelResult()
+void ModelProcess::OutputModelResult(std::vector<std::vector<float>> outFloat)
 {
+
     for (size_t i = 0; i < aclmdlGetDatasetNumBuffers(output_); ++i)
     {
         // get model output data
+        std::vector<float> tmpFloat;
         aclDataBuffer *dataBuffer = aclmdlGetDatasetBuffer(output_, i);
         void *data = aclGetDataBufferAddr(dataBuffer);
         uint32_t len = aclGetDataBufferSizeV2(dataBuffer);
@@ -355,6 +357,7 @@ void ModelProcess::OutputModelResult()
         for (unsigned int j = 0; j < len / sizeof(float); ++j)
         {
             INFO_LOG("index[%d] value[%lf]", j, *(outData + j));
+            tmpFloat.push_back(*(outData + j));
         }
 
         // int cnt = 0;
@@ -378,6 +381,7 @@ void ModelProcess::OutputModelResult()
                 return;
             }
         }
+        outFloat.push_back(tmpFloat);
     }
 
     INFO_LOG("output data success");

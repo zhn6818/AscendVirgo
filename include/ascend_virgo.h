@@ -9,6 +9,8 @@
 #include <fstream>
 #include <ostream>
 #include <sstream>
+#include <opencv2/opencv.hpp>
+#include <opencv2/imgproc/types_c.h>
 
 namespace ASCEND_VIRGO
 {
@@ -21,7 +23,7 @@ namespace ASCEND_VIRGO
     public:
         Classify(const std::string &model_path, const std::string &name_Path, size_t deviceId);
         ~Classify();
-        void doClassify();
+        std::vector<std::vector<Predictioin>> doClassify(const std::vector<cv::Mat> &imgs);
         size_t GetBatch();
 
     private:

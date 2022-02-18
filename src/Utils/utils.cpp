@@ -125,6 +125,75 @@ Result Utils::MemcpyFileToDeviceBuffer(const std::string &fileName, void *&picDe
     return SUCCESS;
 }
 
+Result Utils::MemcpyImgToDeviceBuffer(cv::Mat &img, void *&picDevBuffer, size_t inputBuffSize)
+{
+    void *inputBuff = nullptr;
+    uint32_t fileSize = img.cols * img.rows * img.channels() * sizeof(float);
+    // auto ret = Utils::ReadBinFile(fileName, inputBuff, fileSize);
+    // if (ret != SUCCESS)
+    // {
+    //     ERROR_LOG("read bin file failed, file name is %s", fileName.c_str());
+    //     return FAILED;
+    // }
+
+    auto ret = SUCCESS;
+
+    if (inputBuffSize != static_cast<size_t>(fileSize))
+    {
+        ERROR_LOG("input image size[%u] is not equal to model input size[%zu]", fileSize, inputBuffSize);
+        if (!g_isDevice)
+        {
+            (void)aclrtFreeHost(inputBuff);
+        }
+        else
+        {
+            (void)aclrtFree(inputBuff);
+        }
+        return FAILED;
+    }
+    cv::Mat resizedimage;
+    cv::resize(img, resizedimage, cv::Size(150, 150));
+    resizedimage.convertTo(resizedimage, CV_32FC3);
+    float *imagetrans = (float *)malloc(inputBuffSize);
+    int index = 0;
+    int step = resizedimage.cols * resizedimage.rows;
+    for (int i = 0; i < resizedimage.rows; i++)
+    {
+        for (int j = 0; j < resizedimage.cols; j++)
+        {
+            *(imagetrans + index) = resizedimage.at<cv::Vec3f>(i, j)[0];
+            *(imagetrans + index + step) = resizedimage.at<cv::Vec3f>(i, j)[0];
+            *(imagetrans + index + 2 * step) = resizedimage.at<cv::Vec3f>(i, j)[0];
+            index++;
+        }
+    }
+
+    // if (!g_isDevice)
+    // {
+    // if app is running in host, need copy data from host to device
+    aclError aclRet = aclrtMemcpy(picDevBuffer, inputBuffSize, imagetrans, inputBuffSize, ACL_MEMCPY_HOST_TO_DEVICE);
+    if (aclRet != ACL_SUCCESS)
+    {
+        ERROR_LOG("memcpy failed. buffer size is %zu, errorCode is %d", inputBuffSize, static_cast<int32_t>(aclRet));
+        (void)aclrtFreeHost(inputBuff);
+        return FAILED;
+    }
+    (void)aclrtFreeHost(inputBuff);
+    // }
+    // else
+    // { // app is running in device
+    //     aclError aclRet = aclrtMemcpy(picDevBuffer, inputBuffSize, inputBuff, inputBuffSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
+    //     if (aclRet != ACL_SUCCESS)
+    //     {
+    //         ERROR_LOG("memcpy d2d failed. buffer size is %zu, errorCode is %d", inputBuffSize, static_cast<int32_t>(aclRet));
+    //         (void)aclrtFree(inputBuff);
+    //         return FAILED;
+    //     }
+    //     (void)aclrtFree(inputBuff);
+    // }
+    return SUCCESS;
+}
+
 Result Utils::CheckPathIsFile(const std::string &fileName)
 {
 #if defined(_MSC_VER)
