@@ -20,13 +20,14 @@ namespace ASCEND_VIRGO
         size_t GetInputSize();
 
     private:
-        int32_t deviceId_;
-        aclrtContext context_;
+        
+        
         aclrtStream stream_;
         std::vector<std::string> testFile;
         size_t devBufferSize;
         void *picDevBuffer = nullptr;
-        ModelProcess modelProcess;
+        // ModelProcess modelProcess;
+        std::shared_ptr<ModelProcess> modelProcess;
         std::string modelPath, namesPath;
         std::vector<std::string> labels;
     };

@@ -3,7 +3,7 @@
 #include "utils.h"
 #include "model_process.h"
 #include "classify.h"
-#include "classifyDvpp.h"
+// #include "classifyDvpp.h"
 
 namespace ASCEND_VIRGO
 {
@@ -35,11 +35,11 @@ namespace ASCEND_VIRGO
     {
         return m_pHandlerClassifyPrivate->GetInputSize();
     }
-    // Classify::Classify(const std::string &model_path, const std::string &name_Path, size_t deviceId)
+    // Classification::Classification(const std::string &model_path, const std::string &name_Path, size_t deviceId)
     // {
     //     m_pHandlerClassifyDvpp = std::make_shared<ClassifyDvpp>(model_path, name_Path, deviceId);
     // }
-    // Classify::~Classify()
+    // Classification::~Classification()
     // {
     // }
     // size_t Classify::GetBatch()

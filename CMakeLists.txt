@@ -30,6 +30,7 @@ link_directories(
     /data1/3trirdparty/Ascend/ascend-toolkit/latest/atc/lib64
     /data1/3trirdparty/Ascend/driver/lib64/driver
     /data1/3trirdparty/opencv/opencv4.5.2/lib
+    /data1/3trirdparty/usr
     /data1/3trirdparty/tbb/lib
 )
 
@@ -45,8 +46,11 @@ set(
     opencv_imgcodecs
     tbb
     libtbb.so.2
+    png
 )
 
 
 add_subdirectory(src)
 add_subdirectory(test)
+
+# /data1/3trirdparty/Ascend/ascend-toolkit/latest/fwkacllib/ccec_compiler/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/fwkacllib/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/atc/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/atc/ccec_compiler/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/fwkacllib/ccec_compiler/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/fwkacllib/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/atc/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/atc/ccec_compiler/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/fwkacllib/ccec_compiler/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/fwkacllib/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/atc/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/atc/ccec_compiler/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/fwkacllib/ccec_compiler/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/fwkacllib/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/atc/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/atc/ccec_compiler/bin:/root/.vscode-server/bin/f80445acd5a3dadef24aa209168452a3d97cc326/bin/remote-cli:/data1/3trirdparty/Ascend/ascend-toolkit/latest/fwkacllib/ccec_compiler/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/fwkacllib/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/atc/bin:/data1/3trirdparty/Ascend/ascend-toolkit/latest/atc/ccec_compiler/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin

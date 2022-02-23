@@ -11,3 +11,11 @@ target_link_libraries(
     AscendVirgo
     ${3RDLIBS}
 )
+
+add_executable(dvpp_test testDvpp.cpp)
+
+target_link_libraries(
+    dvpp_test
+    AscendVirgo
+    ${3RDLIBS}
+)

@@ -12,18 +12,18 @@
 #include "utils.h"
 #include "acl/acl.h"
 
-class ModelProcess
+class ModelProcessClassify
 {
 public:
     /**
      * @brief Constructor
      */
-    ModelProcess();
+    ModelProcessClassify();
 
     /**
      * @brief Destructor
      */
-    virtual ~ModelProcess();
+    virtual ~ModelProcessClassify();
 
     /**
      * @brief load model
@@ -41,22 +41,13 @@ public:
      * @brief create model desc
      * @return result
      */
-    Result CreateModelDesc();
+    Result CreateDesc();
 
     /**
      * @brief destroy desc
      */
-    void DestroyModelDesc();
+    void DestroyDesc();
 
-    /**
-     * @get input size by index
-     * @param [in] index: input index
-     * @param [out] inputSize: input size of index
-     * @return result
-     */
-    Result GetInputSizeByIndex(const size_t index, size_t &inputSize);
-
-    Result GetInputSize(size_t &inputNumber);
     /**
      * @brief create model input
      * @param [in] inputDataBuffer: input buffer
@@ -88,25 +79,24 @@ public:
     Result Execute();
 
     /**
-     * @brief dump model output result to file
+     * @brief get model output data
+     * @return output dataset
      */
-    void DumpModelOutputResult();
+    aclmdlDataset *GetModelOutputData();
 
     /**
-     * @brief print model output result
+     * @brief get model intput width and height
+     * @return output dataset
      */
-    void OutputModelResult(std::vector<std::vector<float>> &outFloat);
-
-    aclmdlDataset *GetInputData();
     Result GetModelInputWH(int &width, int &height);
 
 private:
+    bool loadFlag_; // model load flag
     uint32_t modelId_;
     size_t modelWorkSize_;   // model work memory buffer size
     size_t modelWeightSize_; // model weight memory buffer size
     void *modelWorkPtr_;     // model work memory buffer
     void *modelWeightPtr_;   // model weight memory buffer
-    bool loadFlag_;          // model load flag
     aclmdlDesc *modelDesc_;
     aclmdlDataset *input_;
     aclmdlDataset *output_;

@@ -16,7 +16,8 @@ namespace ASCEND_VIRGO
 {
     typedef std::pair<std::string, float> Predictioin;
     static float prob_sigmoid(float x) { return (1 / (1 + exp(-x))); }
-    class ClassifyDvpp;
+
+
     class ClassifyPrivate;
     class Classify
     {
@@ -31,6 +32,6 @@ namespace ASCEND_VIRGO
 
     private:
         std::shared_ptr<ClassifyPrivate> m_pHandlerClassifyPrivate;
-        std::shared_ptr<ClassifyDvpp> m_pHandlerClassifyDvpp;
+        // std::shared_ptr<ClassifyDvpp> m_pHandlerClassifyDvpp;
     };
 };

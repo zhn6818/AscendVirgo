@@ -21,6 +21,7 @@ extern bool g_isDevice;
 ModelProcess::ModelProcess() : modelId_(0), modelWorkSize_(0), modelWeightSize_(0), modelWorkPtr_(nullptr),
                                modelWeightPtr_(nullptr), loadFlag_(false), modelDesc_(nullptr), input_(nullptr), output_(nullptr)
 {
+    std::cout << "modelId: " << modelId_ << std::endl;
 }
 
 ModelProcess::~ModelProcess()
@@ -375,7 +376,35 @@ void ModelProcess::OutputModelResult(std::vector<std::vector<float>> &outFloat)
     INFO_LOG("output data success");
     return;
 }
+Result ModelProcess::GetModelInputWH(int &width, int &height)
+{
+    if (modelDesc_ == nullptr)
+    {
+        ERROR_LOG("no model description, get input hw failed");
+        return FAILED;
+    }
+    // format of om used in this app is NHWC, dimsCout is 4
+    // dims[0] is N, dims[1] is H, dims[2] is W dims[3] is C
+    aclmdlIODims dims;
+    // om used in this app has only one input
+    aclError ret = aclmdlGetInputDims(modelDesc_, 0, &dims);
+    if (ret != ACL_ERROR_NONE)
+    {
+        ERROR_LOG("get model input dims failed, errorCode is %d", static_cast<int32_t>(ret));
+        return FAILED;
+    }
+    if (dims.dimCount != 4)
+    {
+        ERROR_LOG("invalid dimsCount %zu, get input hw failed", dims.dimCount);
+        return FAILED;
+    }
+    width = dims.dims[3];
+    height = dims.dims[2];
 
+    INFO_LOG("model input width %d, input height %d", width, height);
+
+    return SUCCESS;
+}
 void ModelProcess::DestroyOutput()
 {
     if (output_ == nullptr)
@@ -394,6 +423,11 @@ void ModelProcess::DestroyOutput()
     (void)aclmdlDestroyDataset(output_);
     output_ = nullptr;
     INFO_LOG("destroy model output success");
+}
+
+aclmdlDataset *ModelProcess::GetInputData()
+{
+    return input_;
 }
 
 Result ModelProcess::Execute()
