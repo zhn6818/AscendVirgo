@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.5.1)
 # project information
 project(AscendVirgo)
 
+//
 # Compile options
 add_compile_options(-std=c++11)
 add_definitions(-O0 -g)
